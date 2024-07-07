@@ -14,30 +14,43 @@ function generateTable(data) {
     }
 const tableContainer = document.getElementById('table-container');  
 tableContainer.innerHTML = generateTable(data);  
+const deleteButtons = document.querySelectorAll('.clear');
 
-const clear =document.getElementsByClassName('clear');
-function deleteItem(item){}
+deleteButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        const row = this.closest('tr'); // Find the closest <tr> to the button
+        row.remove(); // Remove the row
+    });
+});
+const filterBtn = document.getElementById('filterBtn');
+const nameInput = document.getElementById('name');
+const familyInput = document.getElementById('family');
+const table = document.getElementById('mytable');
+const rows = table.getElementsByTagName('tr');
 
+filterBtn.addEventListener('click', filterTable);
 
+function filterTable() {
+    const nameFilter = nameInput.value.toLowerCase();
+    const familyFilter = familyInput.value.toLowerCase();
+    
+    for (let i = 1; i < rows.length; i++) { // Start at 1 to skip the header row
+        const cells = rows[i].getElementsByTagName('td');
+        let nameMatch = true;
+        let familyMatch = true;
 
+        if (nameFilter && cells[0].innerText.toLowerCase().indexOf(nameFilter) === -1) {
+            nameMatch = false;
+        }
+        if (familyFilter && cells[1].innerText.indexOf(familyFilter) === -1) {
+            familyMatch = false;
+        }
 
-/*clear.addEventListener('click' , clearRow);
-function clearRow(){
-    let item ;
-    for(item = 1;item<= clear.length ; item ++){
-        delete data[item];
+        if (nameMatch && familyMatch) {
+            rows[i].style.display = '';
+        } else {
+            rows[i].style.display = 'none';
+        }
     }
 }
-
-const clear = document.getElementsByClassName('clear');
-clear.addEventListener('click',clearRow(this) );
-function clearRow(r) {
-    var i = r.parentNode.parentNode.rowIndex;
-    document.getElementById('mytable').deleteRow(i);
-  }*/
-  /*function deleteRow(r) {
-    var i = r.parentNode.parentNode.rowIndex;
-    document.getElementById('table-container').deleteRow(i);
-  }  */
-
 
